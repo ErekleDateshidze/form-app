@@ -1,0 +1,23 @@
+ input[type="text"],
+        input[type="number"],
+        textarea {
+            outline: none;
+            border: 1px solid grey;
+    
+            &.ng-dirty {
+                &.ng-invalid {
+                        &.ng-touched {
+                            border: 1px solid red;
+                        }
+                    }
+                
+                    &.ng-valid {
+                        &.ng-touched {
+                            border: 1px solid green;
+                        }
+                    }
+            }
+
+         
+        }
+
