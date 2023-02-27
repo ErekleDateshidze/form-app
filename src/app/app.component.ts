@@ -18,6 +18,15 @@ export class AppComponent{
 
   isSubmitted= false;
 
+  
+  get plusButtonDisabled () {
+   return this.form.controls.hobbies?.length === 5;     
+  }
+
+  get  removeButtonDisabled() {
+    return this.form.controls.hobbies?.length === 2;
+  }
+
   hobbies = ['Hiking' , 'Reading' , 'Gym' , 'Meditation' , 'Yoga' , 'Singing']
 
   constructor(private fb: FormBuilder) {}
@@ -28,24 +37,37 @@ export class AppComponent{
   }
 
   private buildForm(){
-    return new FormGroup<RegisterForm>({
-        firstName: new FormControl('', [Validators.required ,  Validators.min(3) , Validators.max(10) ,forbiddenWordsValidator()] ),
-        lastName:new FormControl('' ,[Validators.required , Validators.min(3) , Validators.max(20)]),
-        hobbies:new FormArray([new FormControl('')]),
-        age:new FormControl(null , [Validators.required , Validators.min(10) , Validators.max(30)]),
-        email:new FormControl('' , [Validators.required , Validators.email , emailValidator()]),
-        occupation:new FormControl(null),
-        gender:new FormControl(Gender.Male)
+    return this.fb.group<RegisterForm>({
+        firstName: this.fb.control('', [Validators.required ,  Validators.min(3) , Validators.max(10) ,forbiddenWordsValidator()] ),
+        lastName:this.fb.control('' ,[Validators.required , Validators.min(3) , Validators.max(20)]),
+        hobbies:this.fb.array([this.fb.control('')]),
+        age:this.fb.control(null , [Validators.required , Validators.min(10) , Validators.max(30)]),
+        email:this.fb.control('' , [Validators.required , Validators.email , emailValidator()]),
+        occupation:this.fb.control(null),
+        gender:this.fb.control(Gender.Male)
         
     })
   }
 
   addHobbyControl() {
-    console.log('adding hobby')
+    if(this.form.controls.hobbies?.length === 5) {
+      return
+    }
+    
+    
+    const hobbies = this.form.controls.hobbies;
+    hobbies?.push(this.fb.control(''));
+  }
+
+    
+ removeHobbyControl(index : number) {
+    const hobbies = this.form.controls.hobbies;
+    hobbies?.removeAt(index);
   }
 
   ngOnInit(){
-    this.form.controls['email'].addAsyncValidators(emailValidator())
+    this.form.controls['email'].addAsyncValidators(emailValidator());
+    this.form.valueChanges.subscribe((x) => console.log(x))
   }
 
 }

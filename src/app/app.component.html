@@ -86,14 +86,26 @@
   </div>
   <div>
     <div>Hobbies</div>
-    <div>
+    <div
+      *ngFor="
+        let hobbyControl of form.controls.hobbies?.controls;
+        let i = index
+      "
+    >
       <!-- <textarea formControlName="hobbies"></textarea> -->
-      <select formControlName="hobbies">
+      <select formArrayName="hobbies">
         <option [value]="null" selected hidden>Select Hobby</option>
         <option *ngFor="let hobby of hobbies" [value]="hobby">
           {{ hobby }}
         </option>
       </select>
+      <button
+        type="button"
+        (click)="removeHobbyControl(i)"
+        disabled="removeButtonDisabled"
+      >
+        -
+      </button>
       <button type="button" (click)="addHobbyControl()">+</button>
     </div>
   </div>
